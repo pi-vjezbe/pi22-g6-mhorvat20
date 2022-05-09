@@ -14,8 +14,6 @@ namespace Evaluation_Manager
 {
     public partial class FrmStudents : Form
     {
-        private object dgvStudents;
-
         public FrmStudents()
         {
             InitializeComponent();
@@ -28,18 +26,24 @@ namespace Evaluation_Manager
 
         private void ShowStudents()
         {
-            List<Student> students = StudentRepository.getStudents();
-            dataGridView1.DataSource = students;
+            var students = StudentRepository.GetStudents();
+            dgvStudents.DataSource = students;
 
-            dataGridView1.Columns["Id"].DisplayIndex = 0;
-            dataGridView1.Columns["FirstName"].DisplayIndex = 1;
-            dataGridView1.Columns["LastName"].DisplayIndex = 2;
-            dataGridView1.Columns["Grade"].DisplayIndex = 3;
+            dgvStudents.Columns["Id"].DisplayIndex = 0;
+            dgvStudents.Columns["FirstName"].DisplayIndex = 1;
+            dgvStudents.Columns["LastName"].DisplayIndex = 2;
+            dgvStudents.Columns["Grade"].DisplayIndex = 3;
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
+		private void btnEvaluateStudent_Click(object sender, EventArgs e)
+		{
+            Student selectedStudent = dgvStudents.CurrentRow.DataBoundItem as Student;
+            if (selectedStudent != null)
+			{
+                FrmEvaluation frmEvaluation = new FrmEvaluation(selectedStudent);
+                frmEvaluation.ShowDialog();
 
-        }
-    }
+			}
+		}
+	}
 }

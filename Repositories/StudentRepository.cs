@@ -14,38 +14,37 @@ namespace Evaluation_Manager.Repositories
         public static Student GetStudent(int id)
         {
             Student student = null;
-            string sql = $"SELECT * from Students WHERE Id = {id}";
+
+            string sql = $"SELECT * FROM Students WHERE Id = {id}";
             DB.OpenConnection();
             var reader = DB.GetDataReader(sql);
-            if (reader.HasRows)
+            if(reader.HasRows)
             {
                 reader.Read();
                 student = CreateObject(reader);
                 reader.Close();
             }
+
             DB.CloseConnection();
             return student;
         }
 
-        internal static List<Student> getStudents()
-        {
-            throw new NotImplementedException();
-        }
-
         public static List<Student> GetStudents()
         {
-            List<Student> students = new List<Student>();
+            var students = new List<Student>();
+
             string sql = "SELECT * FROM Students";
             DB.OpenConnection();
             var reader = DB.GetDataReader(sql);
-
             while (reader.Read())
             {
                 Student student = CreateObject(reader);
                 students.Add(student);
             }
+
             reader.Close();
             DB.CloseConnection();
+
             return students;
         }
 
@@ -54,7 +53,7 @@ namespace Evaluation_Manager.Repositories
             int id = int.Parse(reader["Id"].ToString());
             string firstName = reader["FirstName"].ToString();
             string lastName = reader["LastName"].ToString();
-            int.TryParse(reader["Grade"].ToString(), out int grade);
+            int grade = int.Parse(reader["Grade"].ToString());
 
             var student = new Student
             {
@@ -63,6 +62,7 @@ namespace Evaluation_Manager.Repositories
                 LastName = lastName,
                 Grade = grade
             };
+
             return student;
         }
     }
